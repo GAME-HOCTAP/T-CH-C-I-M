@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Siêu Cao Thủ Ghép Từ - Đồ Dùng Học Tập</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@600;700;800&family=Quicksand:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+  :root {
+    --primary-blue: #0284c7;
+    --primary-purple: #7c3aed;
+    --accent-yellow: #facc15;
+    --accent-orange: #f97316;
+    --accent-green: #10b981;
+    --text-dark: #1e293b;
+    --card-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.12), 0 8px 12px -4px rgba(0, 0, 0, 0.08);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  body {
+    font-family: 'Quicksand', sans-serif;
+    min-height: 100vh;
+    height: 100vh;
+    background: radial-gradient(circle at 50% 25%, #60a5fa 0%, #8b5cf6 55%, #4c1d95 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: fixed;
+    width: 100vw;
+  }
+
+  #game-app {
+    width: 100vw;
+    max-width: 1024px;
+    height: 100vh;
+    max-height: 768px;
+    position: relative;
+    background: linear-gradient(180deg, #f8fafc 0%, #e0f2fe 50%, #fef3c7 100%);
+    border-radius: 28px;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.35), 0 0 0 8px #ffffff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* THANH TIẾN ĐỘ */
+  .progress-wrap {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    position: relative;
+    z-index: 29;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent-orange), var(--accent-yellow), var(--accent-green));
+    transition: width 0.35s ease;
+  }
+
+  /* THANH HUD TRÊN CÙNG */
+  .hud-topbar {
+    position: relative;
+    z-index: 30;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid #ffffff;
+  }
+
+  .round-pill {
+    background: linear-gradient(135deg, var(--primary-purple), #4f46e5);
+    color: #ffffff;
+    padding: 7px 18px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+  }
+
+  .stat-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .stat-badge {
+    background: #ffffff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-dark);
+    border: 2px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-sound {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    color: var(--primary-blue);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* SÂN KHẤU CHÍNH */
+  .stage-arena {
+    position: relative;
+    z-index: 20;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    overflow: hidden;
+  }
+
+  /* BẢNG ĐỒ DÙNG */
+  .object-card-board {
+    background: #ffffff;
+    border: 4px solid #38bdf8;
+    border-radius: 24px;
+    padding: 14px 22px;
+    width: 100%;
+    max-width: 860px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .object-visual-box {
+    width: 150px;
+    height: 125px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
+    border-radius: 18px;
+    border: 2px solid #bae6fd;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+  }
+
+  .object-name-tag {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--primary-blue);
+    margin-top: 4px;
+    text-align: center;
+  }
+
+  .object-prompt-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .target-aspect-label {
+    font-size: 13px;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .object-story-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text-dark);
+    line-height: 1.4;
+  }
+
+  /* KHUNG GHÉP TỪ: TIẾNG 1 CỐ ĐỊNH + Ô CHỌN TIẾNG 2 */
+  .assembly-bench {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 10px 0;
+  }
+
+  .fixed-first-word {
+    min-width: 160px;
+    height: 70px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 3px solid #3b82f6;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    font-weight: 900;
+    color: #1e40af;
+    padding: 0 20px;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+  }
+
+  .plus-bridge {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--accent-orange);
+  }
+
+  .target-drop-socket {
+    min-width: 160px;
+    height: 70px;
+    background: #ffffff;
+    border: 3px dashed #94a3b8;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    font-weight: 900;
+    color: #0369a1;
+    padding: 0 20px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .target-drop-socket.active-wait {
+    border-color: var(--accent-orange);
+    background: #fff7ed;
+    color: #ea580c;
+  }
+  .target-drop-socket.correct-match {
+    border-style: solid;
+    border-color: var(--accent-green);
+    background: #ecfdf5;
+    color: #065f46;
+  }
+
+  /* KHO 3 THẺ TỪ LỰA CHỌN DUY NHẤT */
+  .tiles-pool-grid {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+    max-width: 860px;
+    padding: 10px 0;
+  }
+
+  .choice-card-btn {
+    background: linear-gradient(145deg, #ffffff 0%, #fef3c7 100%);
+    border: 3.5px solid #f59e0b;
+    color: #78350f;
+    font-size: 26px;
+    font-weight: 900;
+    padding: 16px 36px;
+    border-radius: 24px;
+    cursor: pointer;
+    box-shadow: 0 7px 0 #b45309, 0 10px 18px rgba(180, 83, 9, 0.2);
+    transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 140px;
+    text-align: center;
+  }
+  .choice-card-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 3px 0 #b45309;
+  }
+  .choice-card-btn.wrong-shake {
+    border-color: #ef4444 !important;
+    background: #fee2e2 !important;
+    color: #991b1b !important;
+    box-shadow: 0 7px 0 #b91c1c !important;
+    animation: shakeCard 0.4s ease-in-out;
+  }
+  @keyframes shakeCard {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+  }
+
+  /* KHUNG PHẢN HỒI SƯ PHẠM */
+  .coach-feedback-strip {
+    width: 100%;
+    max-width: 860px;
+    min-height: 52px;
+    background: #f8fafc;
+    border-radius: 16px;
+    border: 2px dashed #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #475569;
+    text-align: center;
+  }
+  .coach-feedback-strip.fb-correct {
+    background: #ecfdf5;
+    border-color: #10b981;
+    border-style: solid;
+    color: #065f46;
+  }
+  .coach-feedback-strip.fb-wrong {
+    background: #fff1f2;
+    border-color: #f43f5e;
+    border-style: solid;
+    color: #9f1239;
+  }
+
+  /* MASCOT HOẠT HỌA BÉ THỎ */
+  .mascot-bunny-corner {
+    position: absolute;
+    bottom: 8px;
+    left: 14px;
+    width: 95px;
+    height: 110px;
+    cursor: pointer;
+    z-index: 25;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+    animation: bunnyIdle 2.5s infinite alternate ease-in-out;
+  }
+  @keyframes bunnyIdle {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-6px); }
+  }
+  .bunny-jump { animation: bunnyHop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; }
+  @keyframes bunnyHop {
+    0% { transform: translateY(0) scale(1); }
+    40% { transform: translateY(-30px) scale(1.1) rotate(-6deg); }
+    100% { transform: translateY(0) scale(1); }
+  }
+  .bunny-wiggle { animation: bunnyShake 0.45s ease-in-out !important; }
+  @keyframes bunnyShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px) rotate(-8deg); }
+    75% { transform: translateX(10px) rotate(8deg); }
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+  }
+
+  .modal-dialog {
+    background: #ffffff;
+    border-radius: 30px;
+    padding: 26px 24px;
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+    border: 5px solid #facc15;
+    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-height: 94vh;
+    overflow-y: auto;
+  }
+  @keyframes modalPop {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .modal-wide { max-width: 860px; text-align: left; padding: 22px; }
+
+  .btn-big-play {
+    background: linear-gradient(145deg, #10b981, #059669);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 19px;
+    font-weight: 900;
+    border: none;
+    padding: 12px 36px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #047857, 0 10px 18px rgba(5, 150, 105, 0.35);
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+  }
+  .btn-big-play:active { transform: translateY(3px); box-shadow: 0 3px 0 #047857; }
+
+  /* BẢNG TỔNG KẾT TỪ VỰNG */
+  .words-review-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .review-column {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 10px 14px;
+    border: 2px solid #e2e8f0;
+  }
+  .review-col-title {
+    font-size: 13px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .word-tag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 800;
+    margin: 3px;
+  }
+  .tag-mastered { border-color: #86efac; color: #166534; background: #f0fdf4; }
+  .tag-needwork { border-color: #fca5a5; color: #991b1b; background: #fef2f2; }
+
+  /* CANVAS PHÁO HOA */
+  #fx-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none !important;
+    z-index: 90;
+  }
+  .floating-score {
+    position: absolute;
+    font-size: 26px;
+    font-weight: 900;
+    color: #facc15;
+    text-shadow: 0 3px 6px rgba(0,0,0,0.3), 0 0 12px #ea580c;
+    pointer-events: none !important;
+    animation: floatUp 0.8s forwards ease-out;
+    z-index: 95;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(0.6); opacity: 0; }
+    30% { opacity: 1; transform: translateY(-20px) scale(1.2); }
+    100% { transform: translateY(-65px) scale(1); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="game-app">
+  <canvas id="fx-canvas"></canvas>
+
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progress-bar"></div>
+  </div>
+
+  <div class="hud-topbar">
+    <div class="round-pill" id="hud-round-pill">
+      <i class="fa-solid fa-compass"></i>
+      <span id="round-title-text">Vòng 1: Nhà Thám Hiểm</span>
+    </div>
+
+    <div class="stat-group">
+      <div class="stat-badge">
+        <i class="fa-solid fa-list-check" style="color: var(--primary-blue);"></i>
+        <span>Câu: <strong id="hud-question-count">1/18</strong></span>
+      </div>
+
+      <div class="stat-badge">
+        <i class="fa-solid fa-star" style="color: #eab308;"></i>
+        <span>Điểm: <strong id="hud-score-value">0</strong></span>
+      </div>
+
+      <button class="btn-sound" id="btn-sound" onclick="toggleAudio()" title="Bật/Tắt âm thanh">
+        <i class="fa-solid fa-volume-high"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="stage-arena">
+    <!-- KHUNG ĐỒ DÙNG -->
+    <div class="object-card-board">
+      <div class="object-visual-box">
+        <div id="object-svg-container" style="width: 100%; height: 85px; display: flex; justify-content: center; align-items: center;"></div>
+        <div class="object-name-tag" id="object-name-tag">Cái thước kẻ</div>
+      </div>
+
+      <div class="object-prompt-col">
+        <div class="target-aspect-label" id="target-aspect-label">ĐẶC ĐIỂM HÌNH DÁNG</div>
+        <div class="object-story-title" id="object-story-title">Chọn tiếng thích hợp để hoàn thành từ chỉ đặc điểm:</div>
+      </div>
+    </div>
+
+    <!-- KHUNG GHÉP: TIẾNG 1 + Ô CHỌN TIẾNG 2 -->
+    <div class="assembly-bench">
+      <div class="fixed-first-word" id="display-first-word">thẳng</div>
+      <div class="plus-bridge">+</div>
+      <div class="target-drop-socket active-wait" id="display-second-socket">?</div>
+    </div>
+
+    <!-- KHO ĐÚNG 3 THẺ TỪ ĐỂ HỌC SINH CHỌN -->
+    <div class="tiles-pool-grid" id="tiles-pool-grid"></div>
+
+    <!-- PHẢN HỒI -->
+    <div class="coach-feedback-strip" id="coach-feedback">
+      <i class="fa-solid fa-hand-pointer" style="margin-right: 6px;"></i>
+      <span>Em hãy chọn 1 trong 3 thẻ từ ở trên để ghép thành từ chỉ đặc điểm đúng nhé!</span>
+    </div>
+
+    <!-- MASCOT BÉ THỎ -->
+    <div class="mascot-bunny-corner" id="mascot-bunny" onclick="petBunny()" title="Bé Thỏ Thông Thái">
+      <svg viewBox="0 0 145 160" width="100%" height="100%">
+        <defs>
+          <radialGradient id="bunnyFur" cx="50%" cy="35%" r="50%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="85%" stop-color="#f8fafc"/>
+            <stop offset="100%" stop-color="#e2e8f0"/>
+          </radialGradient>
+          <linearGradient id="innerEar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f472b6"/>
+            <stop offset="100%" stop-color="#ec4899"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="50" cy="144" rx="17" ry="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+        <ellipse cx="96" cy="144" rx="17" ry="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+        <ellipse cx="73" cy="112" rx="35" ry="30" fill="url(#bunnyFur)" stroke="#cbd5e1" stroke-width="2"/>
+        <path d="M 54 105 L 92 105 L 89 126 L 57 126 Z" fill="#7c3aed"/>
+        <circle cx="73" cy="116" r="3" fill="#facc15"/>
+        <g>
+          <path d="M 52 50 C 40 6, 25 8, 44 2 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+          <path d="M 50 44 C 41 16, 32 16, 45 11 Z" fill="url(#innerEar)"/>
+          <path d="M 94 50 C 106 6, 121 8, 102 2 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+          <path d="M 96 44 C 105 16, 114 16, 101 11 Z" fill="url(#innerEar)"/>
+        </g>
+        <circle cx="73" cy="65" r="32" fill="url(#bunnyFur)" stroke="#cbd5e1" stroke-width="2"/>
+        <circle cx="50" cy="74" r="7" fill="#f472b6" opacity="0.55"/>
+        <circle cx="96" cy="74" r="7" fill="#f472b6" opacity="0.55"/>
+        <ellipse cx="58" cy="62" rx="4.5" ry="6.5" fill="#0f172a"/>
+        <circle cx="60" cy="60" r="2" fill="#ffffff"/>
+        <ellipse cx="88" cy="62" rx="4.5" ry="6.5" fill="#0f172a"/>
+        <circle cx="90" cy="60" r="2" fill="#ffffff"/>
+        <polygon points="73,70 69,66 77,66" fill="#ec4899"/>
+        <path d="M 69 73 Q 73 77 77 73" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
+        <ellipse cx="52" cy="110" rx="7" ry="11" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" transform="rotate(-15 52 110)"/>
+        <ellipse cx="94" cy="110" rx="7" ry="11" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" transform="rotate(15 94 110)"/>
+        <rect x="66" y="102" width="14" height="20" rx="2" fill="#f97316"/>
+        <polygon points="66,122 80,122 73,128" fill="#fde047"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- MODAL BẮT ĐẦU -->
+  <div class="modal-overlay" id="modal-welcome">
+    <div class="modal-dialog">
+      <div style="font-size: 54px; margin-bottom: 4px;">🎒✏️📏</div>
+      <h2 style="font-size: 25px; color: #4338ca; font-weight: 900;">BÉ GHÉP TỪ ĐẶC ĐIỂM</h2>
+      <p style="color: #0369a1; font-weight: 800; font-size: 15px; margin-top: 4px;">
+        Đồ dùng học tập thân thương của học sinh Lớp 2
+      </p>
+
+      <div style="background: #f0fdf4; border: 2px dashed #86efac; border-radius: 18px; padding: 14px; margin: 16px 0; text-align: left; font-size: 15px; font-weight: 700; color: #166534; line-height: 1.6;">
+        <div>✨ Mỗi câu đã có sẵn tiếng đứng trước.</div>
+        <div>👆 Bé chỉ cần chọn <b>1 trong 3 thẻ từ</b> bên dưới để ghép thành từ đúng!</div>
+        <div style="margin-top: 8px; color: #d97706;">⭐ Chọn đúng lần đầu: <b>100 điểm</b> | Thử lại: <b>70 điểm</b></div>
+      </div>
+
+      <button class="btn-big-play" onclick="startGame()">
+        <i class="fa-solid fa-play"></i> BẮT ĐẦU CHƠI
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL HOÀN THÀNH VÒNG -->
+  <div class="modal-overlay" id="modal-round-win" style="display: none;">
+    <div class="modal-dialog">
+      <div style="font-size: 56px;" id="round-win-badge-icon">🎖️</div>
+      <h2 style="font-size: 24px; color: #059669; font-weight: 900; margin-top: 6px;" id="round-win-title">HOÀN THÀNH VÒNG 1!</h2>
+      <p style="color: #475569; font-size: 15px; font-weight: 700; margin-top: 6px;" id="round-win-desc">
+        Bé vừa nhận được: <strong style="color: #d97706;" id="round-badge-name">Huy Hiệu Nhà Thám Hiểm</strong>
+      </p>
+      <div style="font-size: 22px; font-weight: 900; color: #ea580c; margin: 14px 0;">
+        Điểm hiện tại: <span id="round-win-score">0</span>
+      </div>
+      <button class="btn-big-play" onclick="proceedToNextRound()">
+        <i class="fa-solid fa-forward"></i> TIẾP TỤC VÒNG TIẾP THEO
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL TỔNG KẾT -->
+  <div class="modal-overlay" id="modal-game-over" style="display: none;">
+    <div class="modal-dialog modal-wide">
+      <div style="text-align: center;">
+        <div style="font-size: 60px;">🏆🎉</div>
+        <h2 style="font-size: 26px; color: #7c3aed; font-weight: 900;">XUẤT SẮC HOÀN THÀNH!</h2>
+        <p style="color: #059669; font-size: 16px; font-weight: 800; margin-top: 4px;">
+          Bé đã nhận danh hiệu: <b>SIÊU CAO THỦ GHÉP TỪ</b>
+        </p>
+      </div>
+
+      <div style="display: flex; justify-content: space-around; background: #fffbeb; border: 2px solid #fef08a; border-radius: 18px; padding: 12px; margin: 12px 0; text-align: center;">
+        <div>
+          <div style="font-size: 13px; font-weight: 800; color: #92400e;">TỔNG ĐIỂM</div>
+          <div style="font-size: 26px; font-weight: 900; color: #ea580c;" id="final-score-val">0</div>
+        </div>
+        <div>
+          <div style="font-size: 13px; font-weight: 800; color: #92400e;">SỐ CÂU ĐÚNG</div>
+          <div style="font-size: 26px; font-weight: 900; color: #059669;" id="final-correct-val">18/18</div>
+        </div>
+        <div>
+          <div style="font-size: 13px; font-weight: 800; color: #92400e;">ĐÚNG LẦN ĐẦU</div>
+          <div style="font-size: 26px; font-weight: 900; color: #2563eb;" id="final-firsttry-val">0</div>
+        </div>
+      </div>
+
+      <div class="words-review-grid">
+        <div class="review-column">
+          <div class="review-col-title" style="color: #166534;">
+            <i class="fa-solid fa-circle-check"></i> Các từ bé ghép đúng ngay lần đầu:
+          </div>
+          <div id="mastered-words-box"></div>
+        </div>
+
+        <div class="review-column">
+          <div class="review-col-title" style="color: #991b1b;">
+            <i class="fa-solid fa-lightbulb"></i> Các từ bé cần luyện thêm:
+          </div>
+          <div id="needwork-words-box"></div>
+        </div>
+      </div>
+
+      <button class="btn-big-play" onclick="restartEntireGame()">
+        <i class="fa-solid fa-rotate-right"></i> CHƠI LẠI ĐỂ TIẾP TỤC ÔN TẬP
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* =======================================================
+     1. HỆ THỐNG ÂM THANH WEB AUDIO API
+     ======================================================= */
+  let audioCtx = null;
+  let isMuted = false;
+
+  function ensureAudioContext() {
+    try {
+      if (!audioCtx) {
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioClass) audioCtx = new AudioClass();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    } catch(e) {}
+  }
+
+  function playTone(freq, type, duration, delay = 0, vol = 0.2) {
+    if (isMuted || !audioCtx) return;
+    setTimeout(() => {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(vol, audioCtx.currentTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e) {}
+    }, delay);
+  }
+
+  function sfxCorrect() {
+    ensureAudioContext();
+    playTone(523.25, 'triangle', 0.15, 0);
+    playTone(659.25, 'triangle', 0.15, 70);
+    playTone(783.99, 'triangle', 0.18, 140);
+    playTone(1046.50, 'triangle', 0.35, 210);
+  }
+
+  function sfxWrong() {
+    ensureAudioContext();
+    if (isMuted || !audioCtx) return;
+    try {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      const t = audioCtx.currentTime;
+      osc.frequency.setValueAtTime(240, t);
+      osc.frequency.exponentialRampToValueAtTime(110, t + 0.25);
+      gain.gain.setValueAtTime(0.24, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.27);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.29);
+    } catch(e) {}
+  }
+
+  function sfxPop() {
+    ensureAudioContext();
+    playTone(600, 'sine', 0.06, 0, 0.16);
+  }
+
+  function sfxVictory() {
+    ensureAudioContext();
+    const fanfare = [523.25, 659.25, 783.99, 880, 1046.50];
+    fanfare.forEach((f, i) => playTone(f, 'triangle', 0.35, i * 110, 0.25));
+  }
+
+  function toggleAudio() {
+    isMuted = !isMuted;
+    const icon = document.querySelector("#btn-sound i");
+    if (isMuted) {
+      if (icon) icon.className = "fa-solid fa-volume-xmark";
+    } else {
+      if (icon) icon.className = "fa-solid fa-volume-high";
+      sfxPop();
+    }
+  }
+
+  /* =======================================================
+     2. HÌNH ẢNH SVG ĐỒ DÙNG HỌC TẬP
+     ======================================================= */
+  const objectSVGs = {
+    thuoc_ke: `
+      <svg viewBox="0 0 120 70" width="100%" height="70">
+        <rect x="10" y="22" width="100" height="26" rx="4" fill="#fb923c" stroke="#c2410c" stroke-width="2"/>
+        <line x1="20" y1="22" x2="20" y2="32" stroke="#7c2d12" stroke-width="2"/>
+        <line x1="30" y1="22" x2="30" y2="28" stroke="#7c2d12" stroke-width="1.5"/>
+        <line x1="40" y1="22" x2="40" y2="32" stroke="#7c2d12" stroke-width="2"/>
+        <line x1="50" y1="22" x2="50" y2="28" stroke="#7c2d12" stroke-width="1.5"/>
+        <line x1="60" y1="22" x2="60" y2="32" stroke="#7c2d12" stroke-width="2"/>
+        <line x1="70" y1="22" x2="70" y2="28" stroke="#7c2d12" stroke-width="1.5"/>
+        <line x1="80" y1="22" x2="80" y2="32" stroke="#7c2d12" stroke-width="2"/>
+        <line x1="90" y1="22" x2="90" y2="28" stroke="#7c2d12" stroke-width="1.5"/>
+        <line x1="100" y1="22" x2="100" y2="32" stroke="#7c2d12" stroke-width="2"/>
+      </svg>
+    `,
+    but_chi: `
+      <svg viewBox="0 0 120 70" width="100%" height="70">
+        <g transform="rotate(30 60 35)">
+          <rect x="22" y="30" width="65" height="12" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+          <polygon points="87,30 104,36 87,42" fill="#fed7aa" stroke="#ca8a04" stroke-width="1.5"/>
+          <polygon points="100,34.5 104,36 100,37.5" fill="#0f172a"/>
+          <rect x="14" y="30" width="8" height="12" fill="#f43f5e" rx="2"/>
+        </g>
+      </svg>
+    `,
+    quyen_vo: `
+      <svg viewBox="0 0 120 70" width="100%" height="70">
+        <rect x="18" y="12" width="84" height="48" rx="6" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+        <path d="M 24 16 L 60 16 L 60 54 L 24 54 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+        <path d="M 60 16 L 96 16 L 96 54 L 60 54 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+        <line x1="28" y1="24" x2="54" y2="24" stroke="#e2e8f0" stroke-width="1.5"/>
+        <line x1="28" y1="32" x2="54" y2="32" stroke="#e2e8f0" stroke-width="1.5"/>
+        <line x1="66" y1="24" x2="92" y2="24" stroke="#e2e8f0" stroke-width="1.5"/>
+        <line x1="66" y1="32" x2="92" y2="32" stroke="#e2e8f0" stroke-width="1.5"/>
+      </svg>
+    `,
+    bang_con: `
+      <svg viewBox="0 0 120 70" width="100%" height="70">
+        <rect x="16" y="10" width="88" height="52" rx="6" fill="#d97706" stroke="#92400e" stroke-width="2"/>
+        <rect x="22" y="16" width="76" height="40" rx="3" fill="#0f172a"/>
+        <line x1="22" y1="29" x2="98" y2="29" stroke="#334155" stroke-width="1"/>
+        <line x1="22" y1="43" x2="98" y2="43" stroke="#334155" stroke-width="1"/>
+        <line x1="47" y1="16" x2="47" y2="56" stroke="#334155" stroke-width="1"/>
+        <line x1="73" y1="16" x2="73" y2="56" stroke="#334155" stroke-width="1"/>
+      </svg>
+    `,
+    hop_but: `
+      <svg viewBox="0 0 120 70" width="100%" height="70">
+        <rect x="18" y="20" width="84" height="34" rx="10" fill="#f472b6" stroke="#db2777" stroke-width="2"/>
+        <line x1="22" y1="26" x2="94" y2="26" stroke="#fbcfe8" stroke-width="2" stroke-dasharray="3,2"/>
+        <circle cx="92" cy="26" r="4" fill="#fde047" stroke="#ca8a04" stroke-width="1"/>
+        <path d="M 60 32 L 62 38 L 68 38 L 63 42 L 65 48 L 60 44 L 55 48 L 57 42 L 52 38 L 58 38 Z" fill="#fef08a"/>
+      </svg>
+    `,
+    cap_sach: `
+      <svg viewBox="0 0 120 70" width="100%" height="70">
+        <path d="M 45 16 C 45 10, 75 10, 75 16" fill="none" stroke="#475569" stroke-width="3"/>
+        <rect x="22" y="18" width="76" height="46" rx="10" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
+        <path d="M 22 24 L 60 42 L 98 24" fill="#38bdf8" stroke="#0369a1" stroke-width="1.5"/>
+        <rect x="54" y="38" width="12" height="10" rx="2" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+      </svg>
+    `,
+    cuc_tay: `
+      <svg viewBox="0 0 120 70" width="100%" height="70">
+        <g transform="rotate(-15 60 35)">
+          <rect x="25" y="22" width="40" height="26" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+          <rect x="65" y="22" width="30" height="26" rx="4" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+        </g>
+      </svg>
+    `,
+    but_muc: `
+      <svg viewBox="0 0 120 70" width="100%" height="70">
+        <g transform="rotate(-25 60 35)">
+          <rect x="20" y="30" width="60" height="11" rx="2" fill="#7c3aed" stroke="#5b21b6" stroke-width="1.5"/>
+          <polygon points="80,30 96,35.5 80,41" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <line x1="88" y1="35.5" x2="96" y2="35.5" stroke="#334155" stroke-width="1"/>
+          <rect x="15" y="29" width="10" height="13" rx="2" fill="#facc15"/>
+        </g>
+      </svg>
+    `,
+    keo_thu_cong: `
+      <svg viewBox="0 0 120 70" width="100%" height="70">
+        <line x1="25" y1="20" x2="85" y2="50" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+        <line x1="25" y1="50" x2="85" y2="20" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="55" cy="35" r="4" fill="#facc15"/>
+        <circle cx="20" cy="18" r="9" fill="none" stroke="#ef4444" stroke-width="4"/>
+        <circle cx="20" cy="52" r="9" fill="none" stroke="#ef4444" stroke-width="4"/>
+      </svg>
+    `,
+    hop_mau: `
+      <svg viewBox="0 0 120 70" width="100%" height="70">
+        <rect x="18" y="16" width="84" height="42" rx="8" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+        <circle cx="32" cy="37" r="7" fill="#ef4444"/>
+        <circle cx="50" cy="37" r="7" fill="#3b82f6"/>
+        <circle cx="68" cy="37" r="7" fill="#10b981"/>
+        <circle cx="86" cy="37" r="7" fill="#a855f7"/>
+      </svg>
+    `,
+    bao_boc_sach: `
+      <svg viewBox="0 0 120 70" width="100%" height="70">
+        <rect x="22" y="14" width="76" height="46" rx="5" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,2"/>
+        <rect x="28" y="19" width="64" height="36" rx="3" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+        <line x1="60" y1="19" x2="60" y2="55" stroke="#cbd5e1" stroke-width="1.5"/>
+      </svg>
+    `
+  };
+
+  /* =======================================================
+     3. NGÂN HÀNG BÀI TẬP: ĐÃ CỐ ĐỊNH TIẾNG ĐẦU, CHỌN 1 TRONG 3
+     ======================================================= */
+  const gameDatabase = [
+    // --- VÒNG 1 (6 CÂU) ---
+    {
+      round: 1,
+      objectKey: "thuoc_ke",
+      objectName: "Cái thước kẻ",
+      aspect: "Đặc điểm hình dáng",
+      prompt: "Quan sát chiếc thước kẻ dẹt và chọn tiếng thích hợp:",
+      firstWord: "thẳng",
+      correctWord: "tắp",
+      choices: ["tắp", "nhũn", "cong"],
+      example: "Cây thước kẻ thẳng tắp giúp em kẻ bài ngay ngắn."
+    },
+    {
+      round: 1,
+      objectKey: "but_chi",
+      objectName: "Ngòi bút chì",
+      aspect: "Đặc điểm đầu ngòi",
+      prompt: "Ngòi bút chì vừa gọt xong có đặc điểm gì?",
+      firstWord: "nhọn",
+      correctWord: "hoắt",
+      choices: ["hoắt", "mềm", "tù"],
+      example: "Đầu bút chì nhọn hoắt viết từng nét chữ nắn nót."
+    },
+    {
+      round: 1,
+      objectKey: "quyen_vo",
+      objectName: "Trang giấy vở",
+      aspect: "Đặc điểm màu sắc",
+      prompt: "Những trang giấy mới tinh của quyển vở có màu gì?",
+      firstWord: "trắng",
+      correctWord: "muốt",
+      choices: ["muốt", "vàng", "đục"],
+      example: "Những trang vở trắng muốt thơm lừng mùi giấy mới."
+    },
+    {
+      round: 1,
+      objectKey: "bang_con",
+      objectName: "Mặt bảng con",
+      aspect: "Đặc điểm màu sắc",
+      prompt: "Mặt bảng con dùng để viết phấn có màu sắc ra sao?",
+      firstWord: "đen",
+      correctWord: "nhánh",
+      choices: ["nhánh", "trắng", "nhạt"],
+      example: "Mặt bảng con đen nhánh làm nổi bật những dòng phấn trắng."
+    },
+    {
+      round: 1,
+      objectKey: "bang_con",
+      objectName: "Mặt bảng học",
+      aspect: "Đặc điểm bề mặt",
+      prompt: "Khi vuốt nhẹ lên mặt bảng con, bề mặt bảng ra sao?",
+      firstWord: "phẳng",
+      correctWord: "lì",
+      choices: ["lì", "gồ", "cong"],
+      example: "Mặt bảng con phẳng lì giúp em viết chữ rất êm tay."
+    },
+    {
+      round: 1,
+      objectKey: "quyen_vo",
+      objectName: "Trang vở sạch",
+      aspect: "Đặc điểm giữ gìn",
+      prompt: "Sau giờ học, trang vở được giữ gìn sạch sẽ ra sao?",
+      firstWord: "sạch",
+      correctWord: "bong",
+      choices: ["bong", "nhem", "bẩn"],
+      example: "Quyển vở sạch bong, không vương một vết mực thừa."
+    },
+
+    // --- VÒNG 2 (6 CÂU) ---
+    {
+      round: 2,
+      objectKey: "hop_but",
+      objectName: "Chiếc hộp bút",
+      aspect: "Đặc điểm hình dáng",
+      prompt: "Chiếc hộp bút nhỏ nhắn trên bàn học trông như thế nào?",
+      firstWord: "xinh",
+      correctWord: "xắn",
+      choices: ["xắn", "lồ", "cũ"],
+      example: "Chiếc hộp bút xinh xắn đựng gọn gàng bút và thước."
+    },
+    {
+      round: 2,
+      objectKey: "cap_sach",
+      objectName: "Khóa cặp sách",
+      aspect: "Đặc điểm độ sáng bóng",
+      prompt: "Ổ khóa kim loại của chiếc cặp mới sáng chiếu ra sao?",
+      firstWord: "bóng",
+      correctWord: "loáng",
+      choices: ["loáng", "tối", "mờ"],
+      example: "Ổ khóa cặp sách sáng bóng loáng dưới ánh đèn."
+    },
+    {
+      round: 2,
+      objectKey: "hop_mau",
+      objectName: "Bút sáp màu",
+      aspect: "Đặc điểm màu sắc",
+      prompt: "Cây bút màu đỏ đậm tươi tắn trong hộp màu vẽ:",
+      firstWord: "đỏ",
+      correctWord: "au",
+      choices: ["au", "loét", "nhạt"],
+      example: "Cây bút sáp đỏ au vẽ nên những bông hoa tươi thắm."
+    },
+    {
+      round: 2,
+      objectKey: "but_muc",
+      objectName: "Mực bút máy",
+      aspect: "Đặc điểm sắc tím",
+      prompt: "Dòng mực hoa cà khi mới bơm vào bút mực:",
+      firstWord: "tím",
+      correctWord: "ngắt",
+      choices: ["ngắt", "đỏ", "loe"],
+      example: "Nét mực bút máy tím ngắt chảy đều trên trang giấy."
+    },
+    {
+      round: 2,
+      objectKey: "keo_thu_cong",
+      objectName: "Lưỡi kéo thủ công",
+      aspect: "Đặc điểm độ sắc",
+      prompt: "Lưỡi kéo thủ công cắt giấy màu rất ngọt và nhanh:",
+      firstWord: "sắc",
+      correctWord: "lẹm",
+      choices: ["lẹm", "cùn", "mòn"],
+      example: "Lưỡi kéo thủ công sắc lẹm cắt từng đường giấy thẳng thớm."
+    },
+    {
+      round: 2,
+      objectKey: "cap_sach",
+      objectName: "Vải cặp sách",
+      aspect: "Đặc điểm màu sắc",
+      prompt: "Chiếc cặp sách mang sắc xanh da trời trong trẻo:",
+      firstWord: "xanh",
+      correctWord: "biếc",
+      choices: ["biếc", "ngắt", "đen"],
+      example: "Chiếc cặp sách màu xanh biếc theo em tới lớp mỗi ngày."
+    },
+
+    // --- VÒNG 3 (6 CÂU) ---
+    {
+      round: 3,
+      objectKey: "bang_con",
+      objectName: "Tấm bảng con",
+      aspect: "Đặc điểm bốn góc",
+      prompt: "Tấm bảng con có bốn góc đều đặn, ngay ngắn:",
+      firstWord: "vuông",
+      correctWord: "vức",
+      choices: ["vức", "vo", "méo"],
+      example: "Tấm bảng con vuông vức được cất cẩn thận vào ngăn cặp."
+    },
+    {
+      round: 3,
+      objectKey: "bao_boc_sach",
+      objectName: "Màng bọc sách",
+      aspect: "Đặc điểm độ mỏng",
+      prompt: "Tờ giấy kính bọc ngoài cuốn sách rất mỏng và nhẹ:",
+      firstWord: "mỏng",
+      correctWord: "tang",
+      choices: ["tang", "dày", "cộp"],
+      example: "Tờ bìa bọc sách mỏng tang giúp giữ sách luôn mới tinh."
+    },
+    {
+      round: 3,
+      objectKey: "but_chi",
+      objectName: "Vỏ bút chì",
+      aspect: "Đặc điểm màu vàng",
+      prompt: "Lớp sơn vàng tươi ấm áp trên thân cây bút chì:",
+      firstWord: "vàng",
+      correctWord: "óng",
+      choices: ["óng", "khè", "đục"],
+      example: "Thân bút chì sơn màu vàng óng nổi bật trên bàn học."
+    },
+    {
+      round: 3,
+      objectKey: "cap_sach",
+      objectName: "Quai đeo cặp",
+      aspect: "Đặc điểm êm ái",
+      prompt: "Lớp đệm quai đeo giúp em không bị đau vai:",
+      firstWord: "êm",
+      correctWord: "ái",
+      choices: ["ái", "cứng", "đơ"],
+      example: "Quai đeo cặp sách êm ái giúp bé tung tăng đến trường."
+    },
+    {
+      round: 3,
+      objectKey: "thuoc_ke",
+      objectName: "Thước dẻo",
+      aspect: "Đặc tính uốn cong",
+      prompt: "Cây thước dẻo có thể uốn cong mà không sợ gãy:",
+      firstWord: "dẻo",
+      correctWord: "dai",
+      choices: ["dai", "cứng", "mềm"],
+      example: "Cây thước kẻ bằng nhựa dẻo dai uốn cong thoải mái."
+    },
+    {
+      round: 3,
+      objectKey: "cap_sach",
+      objectName: "Chỉ may cặp",
+      aspect: "Đặc điểm độ chắc chắn",
+      prompt: "Đường chỉ may cẩn thận, dùng suốt cả năm vẫn tốt:",
+      firstWord: "bền",
+      correctWord: "chắc",
+      choices: ["chắc", "nhũn", "lỏng"],
+      example: "Chiếc cặp sách được may bền chắc, gắn bó cùng em mỗi ngày."
+    }
+  ];
+
+  /* =======================================================
+     4. TRẠNG THÁI TRÒ CHƠI
+     ======================================================= */
+  let currentIndex = 0;
+  let totalScore = 0;
+  let isFirstAttempt = true;
+  let firstTryCorrectCount = 0;
+
+  let masteredWords = [];
+  let needWorkWords = [];
+
+  const roundNames = {
+    1: "Vòng 1: Nhà Thám Hiểm",
+    2: "Vòng 2: Thử Thách Ghép Từ",
+    3: "Vòng 3: Siêu Cao Thủ"
+  };
+
+  const roundBadges = {
+    1: { icon: "🧭", name: "Huy Hiệu Nhà Thám Hiểm Đồ Dùng" },
+    2: { icon: "⚡", name: "Huy Hiệu Bậc Thầy Ghép Từ" },
+    3: { icon: "👑", name: "Huy Hiệu Siêu Cao Thủ Đồ Dùng Học Tập" }
+  };
+
+  /* =======================================================
+     5. CÁC HÀM ĐIỀU KHIỂN & HIỂN THỊ
+     ======================================================= */
+  function startGame() {
+    ensureAudioContext();
+    sfxPop();
+    document.getElementById("modal-welcome").style.display = "none";
+    currentIndex = 0;
+    totalScore = 0;
+    firstTryCorrectCount = 0;
+    masteredWords = [];
+    needWorkWords = [];
+    loadQuestion(currentIndex);
+  }
+
+  function loadQuestion(index) {
+    if (index >= gameDatabase.length) {
+      showFinalGameOver();
+      return;
+    }
+
+    const q = gameDatabase[index];
+    isFirstAttempt = true;
+
+    // Cập nhật HUD
+    document.getElementById("round-title-text").textContent = roundNames[q.round];
+    document.getElementById("hud-question-count").textContent = `${index + 1}/${gameDatabase.length}`;
+    document.getElementById("hud-score-value").textContent = totalScore;
+    document.getElementById("progress-bar").style.width = `${(index / gameDatabase.length) * 100}%`;
+
+    // Cập nhật Thẻ đồ dùng
+    document.getElementById("object-name-tag").textContent = q.objectName;
+    document.getElementById("object-svg-container").innerHTML = objectSVGs[q.objectKey] || "";
+    document.getElementById("target-aspect-label").textContent = q.aspect;
+    document.getElementById("object-story-title").textContent = q.prompt;
+
+    // Cập nhật Khung ghép từ: Tiếng đầu cố định, ô thứ hai trống
+    document.getElementById("display-first-word").textContent = q.firstWord;
+    const socket = document.getElementById("display-second-socket");
+    socket.textContent = "?";
+    socket.className = "target-drop-socket active-wait";
+
+    // Reset bảng thông báo
+    const fb = document.getElementById("coach-feedback");
+    fb.className = "coach-feedback-strip";
+    fb.innerHTML = `<i class="fa-solid fa-hand-pointer" style="margin-right: 6px;"></i> <span>Em hãy chạm chọn 1 trong 3 thẻ bên dưới nhé!</span>`;
+
+    // Hiển thị đúng 3 thẻ từ đã xáo trộn
+    const tilesGrid = document.getElementById("tiles-pool-grid");
+    tilesGrid.innerHTML = "";
+
+    const shuffledChoices = [...q.choices].sort(() => Math.random() - 0.5);
+
+    shuffledChoices.forEach(choiceText => {
+      const btn = document.createElement("button");
+      btn.className = "choice-card-btn";
+      btn.textContent = choiceText;
+      btn.onclick = () => onChoiceSelect(btn, choiceText);
+      tilesGrid.appendChild(btn);
+    });
+  }
+
+  /* =======================================================
+     6. XỬ LÝ CHỌN THẺ TỪ
+     ======================================================= */
+  function onChoiceSelect(btnElem, chosenWord) {
+    const q = gameDatabase[currentIndex];
+    const socket = document.getElementById("display-second-socket");
+    const fb = document.getElementById("coach-feedback");
+
+    sfxPop();
+
+    if (chosenWord === q.correctWord) {
+      // ĐÚNG
+      sfxCorrect();
+      cheerBunny();
+      triggerConfetti(40);
+
+      socket.textContent = chosenWord;
+      socket.className = "target-drop-socket correct-match";
+
+      const earnedPoints = isFirstAttempt ? 100 : 70;
+      totalScore += earnedPoints;
+      spawnScorePop(`+${earnedPoints}`);
+
+      const fullWord = `${q.firstWord} ${q.correctWord}`;
+      if (isFirstAttempt) {
+        firstTryCorrectCount++;
+        masteredWords.push(fullWord);
+      } else {
+        needWorkWords.push(fullWord);
+      }
+
+      fb.className = "coach-feedback-strip fb-correct";
+      fb.innerHTML = `<i class="fa-solid fa-circle-check" style="margin-right: 6px; font-size: 18px;"></i> <span>Rất giỏi! <b>"${fullWord}"</b> – ${q.example}</span>`;
+
+      // Khóa nút để học sinh quan sát câu mẫu
+      document.querySelectorAll(".choice-card-btn").forEach(b => b.style.pointerEvents = "none");
+
+      setTimeout(() => {
+        checkRoundProgress();
+      }, 1500);
+
+    } else {
+      // CHƯA ĐÚNG
+      sfxWrong();
+      wobbleBunny();
+      isFirstAttempt = false;
+
+      btnElem.classList.add("wrong-shake");
+      setTimeout(() => btnElem.classList.remove("wrong-shake"), 400);
+
+      fb.className = "coach-feedback-strip fb-wrong";
+      fb.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="margin-right: 6px;"></i> <span>Chưa đúng rồi! Em hãy thử lại với thẻ khác nhé!</span>`;
+    }
+  }
+
+  function checkRoundProgress() {
+    // Hoàn thành vòng: câu 6 (hết Vòng 1), câu 12 (hết Vòng 2), câu 18 (hết Vòng 3)
+    if (currentIndex === 5) {
+      showRoundWinModal(1);
+    } else if (currentIndex === 11) {
+      showRoundWinModal(2);
+    } else if (currentIndex + 1 >= gameDatabase.length) {
+      showFinalGameOver();
+    } else {
+      currentIndex++;
+      loadQuestion(currentIndex);
+    }
+  }
+
+  function showRoundWinModal(roundNum) {
+    sfxVictory();
+    triggerConfetti(90);
+
+    const b = roundBadges[roundNum];
+    document.getElementById("round-win-badge-icon").textContent = b.icon;
+    document.getElementById("round-win-title").textContent = `HOÀN THÀNH VÒNG ${roundNum}!`;
+    document.getElementById("round-badge-name").textContent = b.name;
+    document.getElementById("round-win-score").textContent = totalScore;
+
+    document.getElementById("modal-round-win").style.display = "flex";
+  }
+
+  function proceedToNextRound() {
+    sfxPop();
+    document.getElementById("modal-round-win").style.display = "none";
+    currentIndex++;
+    loadQuestion(currentIndex);
+  }
+
+  /* =======================================================
+     7. MÀN HÌNH TỔNG KẾT
+     ======================================================= */
+  function showFinalGameOver() {
+    sfxVictory();
+    triggerConfetti(150);
+
+    document.getElementById("progress-bar").style.width = "100%";
+    document.getElementById("final-score-val").textContent = totalScore;
+    document.getElementById("final-correct-val").textContent = `${gameDatabase.length}/${gameDatabase.length}`;
+    document.getElementById("final-firsttry-val").textContent = firstTryCorrectCount;
+
+    const masterBox = document.getElementById("mastered-words-box");
+    masterBox.innerHTML = "";
+    if (masteredWords.length === 0) {
+      masterBox.innerHTML = "<span style='color: #64748b; font-size: 13px;'>Bé hãy cố gắng hơn ở lượt chơi sau nhé!</span>";
+    } else {
+      masteredWords.forEach(w => {
+        const pill = document.createElement("span");
+        pill.className = "word-tag-pill tag-mastered";
+        pill.innerHTML = `<i class="fa-solid fa-star"></i> ${w}`;
+        masterBox.appendChild(pill);
+      });
+    }
+
+    const needBox = document.getElementById("needwork-words-box");
+    needBox.innerHTML = "";
+    if (needWorkWords.length === 0) {
+      needBox.innerHTML = "<span style='color: #166534; font-size: 13px;'>Tuyệt đỉnh! Bé ghép đúng tất cả các từ ngay lần đầu! 🌟</span>";
+    } else {
+      [...new Set(needWorkWords)].forEach(w => {
+        const pill = document.createElement("span");
+        pill.className = "word-tag-pill tag-needwork";
+        pill.innerHTML = `<i class="fa-solid fa-rotate"></i> ${w}`;
+        needBox.appendChild(pill);
+      });
+    }
+
+    document.getElementById("modal-game-over").style.display = "flex";
+  }
+
+  function restartEntireGame() {
+    sfxPop();
+    document.getElementById("modal-game-over").style.display = "none";
+    startGame();
+  }
+
+  /* =======================================================
+     8. HOẠT HỌA MASCOT
+     ======================================================= */
+  const bunnyMascot = document.getElementById("mascot-bunny");
+
+  function petBunny() {
+    sfxPop();
+    if (!bunnyMascot) return;
+    bunnyMascot.classList.remove("bunny-jump");
+    void bunnyMascot.offsetWidth;
+    bunnyMascot.classList.add("bunny-jump");
+  }
+
+  function cheerBunny() {
+    if (!bunnyMascot) return;
+    bunnyMascot.classList.remove("bunny-jump", "bunny-wiggle");
+    void bunnyMascot.offsetWidth;
+    bunnyMascot.classList.add("bunny-jump");
+  }
+
+  function wobbleBunny() {
+    if (!bunnyMascot) return;
+    bunnyMascot.classList.remove("bunny-jump", "bunny-wiggle");
+    void bunnyMascot.offsetWidth;
+    bunnyMascot.classList.add("bunny-wiggle");
+  }
+
+  /* =======================================================
+     9. HIỆU ỨNG PHÁO HOA & FLOATING SCORE
+     ======================================================= */
+  const canvas = document.getElementById("fx-canvas");
+  const ctx = canvas ? canvas.getContext("2d") : null;
+  let particles = [];
+
+  function resizeCanvas() {
+    if (!canvas || !canvas.parentElement) return;
+    canvas.width = canvas.parentElement.clientWidth;
+    canvas.height = canvas.parentElement.clientHeight;
+  }
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+
+  function triggerConfetti(count = 40) {
+    if (!canvas) return;
+    const colors = ["#f43f5e", "#fde047", "#10b981", "#0284c7", "#f97316", "#a855f7"];
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: canvas.width / 2,
+        y: canvas.height * 0.42,
+        vx: (Math.random() - 0.5) * 15,
+        vy: (Math.random() - 0.75) * 16,
+        size: Math.random() * 8 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * 360,
+        spin: (Math.random() - 0.5) * 12,
+        alpha: 1.0,
+        decay: Math.random() * 0.02 + 0.015
+      });
+    }
+  }
+
+  function spawnScorePop(txt) {
+    const pop = document.createElement("div");
+    pop.className = "floating-score";
+    pop.textContent = txt;
+    pop.style.left = "50%";
+    pop.style.top = "40%";
+    const app = document.getElementById("game-app");
+    if (app) {
+      app.appendChild(pop);
+      setTimeout(() => pop.remove(), 800);
+    }
+  }
+
+  function fxLoop() {
+    if (ctx && canvas) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.4;
+        p.rotation += p.spin;
+        p.alpha -= p.decay;
+
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
+        ctx.restore();
+      }
+    }
+    requestAnimationFrame(fxLoop);
+  }
+  requestAnimationFrame(fxLoop);
+</script>
+</body>
+</html>
